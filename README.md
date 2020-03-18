@@ -2,7 +2,7 @@
 
   <h1>🔵🔴`liminoid-js` 🔴🔵</h1>
 
-<strong>Embeddable client-side Python REPLs 🙌 Made possible through the magic of [Web Assembly](https://webassembly.org/) and standing on the shoulders of [PyIodide](https://github.com/iodide-project/pyodide)</strong>
+<strong>Lightweight embeddable client-side Python REPLs 🙌 Made possible through the magic of [Web Assembly](https://webassembly.org/) and standing on the shoulders of [PyIodide](https://github.com/iodide-project/pyodide)</strong>
 
 </div>
 
@@ -24,13 +24,60 @@
 
 ### Features:
 
-- **🔐safe:** all the code runs in a sandboxed Web Assembly environment
-- **🕵️private:** no data or code sent to any servers
-- **🏎fast:** near-native speed with no network communication needed (and automatic GPU offloading through WebGL)
+- **🔐safe:** all the code runs in a sandboxed Web Assembly environment.
+- **🕵️private:** no data or code sent to any servers.
+- **🏎fast:** near-native speed with no network communication needed (and automatic GPU offloading through WebGL).
 - **🏗scalable:** execution happens on the client so it doesn't matter how many people you share it with!
 - **📵works offline:** it. just does. well as long as your web browser is on your local machine...
+- **🪁lightweight:** library itself is **~3kb** and lazy-loads [PyIodide](https://github.com/iodide-project/pyodide) Web Assembly modules in the background.
+- **👯multiplicitous:** can run multiple concurrent Python interpreters asynchronously each in a their own web worker context.
 
-## Quickstart
+## Quickest start (ES6 modules)
+
+`yarn add liminoid-js`
+
+Since `liminoid-js` internally depends on [Pyodide]() to run Python code using Web Assembly in a Web Worker, this package (currently) only workers in a browser environment. Node.js support through [Wasmtime](https://wasmtime.dev/) is on the roadmap however and shouldn't be too difficult to adapt the current code to run as such.
+
+```html
+<script type="module">
+  import { Repl } from 'https://unpkg.com/liminoid-js';
+
+  // initialize the Python runtime
+  const repl = await new Repl({}).init();
+
+  // import libraries needed
+  await repl.run('import pandas as pd');
+
+  // Repl context persists across calls to `run()`
+  const result = await repl.run(
+    'pd.read_csv("https://covidtracking.com/api/states.csv").sort_values("total")'
+  );
+
+  console.log(result); //=>
+</script>
+```
+
+## Quick start (UMD script)
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- load library -->
+    <script src="https://unpkg.com/exeggutor/..." crossorigin></script>
+  </head>
+  <body>
+    <script>
+      const snippet = `print(🥚🌴🥚 exegguting 🥚🌴🥚)`;
+
+      ReactDOM.render(
+        React.createElement(Exeggutor, { code: snippet }, null), // pass an empty `prop` object to use all defaults
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>
+```
 
 ## Goals
 
@@ -40,7 +87,7 @@
 
 ## Roadmap
 
-TBD
+- [ ] Node.js support through [Wasmtime](https://wasmtime.dev/)
 
 ## Contributing/Requests
 

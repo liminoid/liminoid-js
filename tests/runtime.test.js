@@ -5,14 +5,19 @@
 import { expect } from 'chai';
 
 import Runtime from '../src/Runtime.js';
+import workerTemplate from '../src/worker';
 
 export default function() {
   let runtime;
 
   before(async function() {
-    runtime = await new Runtime(new Worker('../dist/worker.js'), 1).init([
-      'numpy'
-    ]);
+    const workerUrl = URL.createObjectURL(
+      new Blob([workerTemplate], {
+        type: 'text/javascript'
+      })
+    );
+    runtime = new Runtime(new Worker(workerUrl), 1);
+    await runtime.init(['numpy']);
   });
 
   it('should initialize Pyodide and preload packages', function() {
@@ -26,15 +31,21 @@ export default function() {
 
   it('should run multiple runtime contexts simultaneously', async function() {
     await runtime.exec('color = "orange"');
-    const color1 = await runtime.exec('color');
 
     const runtime2 = await new Runtime(
-      new Worker('../dist/worker.js'),
-      null,
+      new Worker(
+        URL.createObjectURL(
+          new Blob([workerTemplate], {
+            type: 'text/javascript'
+          })
+        )
+      ),
       2
     ).init();
-
-    const color2 = await runtime2.exec('color = "purple"; color');
+    await runtime2.exec('color = "purple"');
+    const color1 = await runtime.exec('color');
+    await runtime.exec('color = "blue"');
+    const color2 = await runtime2.exec('color');
 
     expect(color1).to.equal('orange');
     expect(color2).to.equal('purple');
