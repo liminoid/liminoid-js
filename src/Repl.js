@@ -1,4 +1,4 @@
-import Runtime from './Runtime';
+import Runtime from './Runtime'; // eslint-disable-line no-unused-vars
 import workerTemplate from './worker';
 
 export default class Repl {
@@ -10,8 +10,7 @@ export default class Repl {
   id;
   scope;
 
-  constructor({ packages = [], scope = 'global' } = {}) {
-    this.packages = packages;
+  constructor(scope = 'global') {
     this.scope = scope === 'local' ? scope : 'global';
     this.workerScript = URL.createObjectURL(
       new Blob([workerTemplate], {
@@ -36,38 +35,11 @@ export default class Repl {
     return this.#worker;
   }
 
-  init(restart = false) {
+  init(packages = []) {
     // initialize web worker for proper Python runtime scope/context
-    if (this.scope === 'local') {
-      this.#worker = new Worker(this.workerScript);
-    } else {
-      // check is class wide shared worker is defined yet
-      if (restart) {
-        Repl.#WORKER = new Worker(this.workerScript);
-      } else {
-        Repl.#WORKER = Repl.#WORKER || new Worker(this.workerScript);
-      }
-
-      this.#worker = Repl.#WORKER;
-    }
-
-    this.#runtime = new Runtime(this.#worker, this.id);
-
-    const promise = new Promise((resolve, reject) => {
-      // initialize Pyodide and preload packages
-      this.#runtime
-        .init(this.packages)
-        .then(res => {
-          if (res === this.#runtime) {
-            resolve(this);
-          }
-        })
-        .catch(res => {
-          reject(res);
-        });
-    });
-
-    return promise;
+    this.packages = packages;
+    this.#assignWorker();
+    return this.#newRuntime();
   }
 
   run(code) {
@@ -89,9 +61,47 @@ export default class Repl {
     this.#worker.terminate();
 
     const promise = new Promise((resolve, reject) => {
-      this.init(true)
+      this.#assignWorker(true);
+      this.#newRuntime()
         .then(res => resolve(res))
         .catch(err => reject(err));
+    });
+
+    return promise;
+  }
+
+  // eslint-disable-next-line no-undef
+  #assignWorker(force = false) {
+    if (this.scope === 'local') {
+      this.#worker = new Worker(this.workerScript);
+    } else {
+      // check is class wide shared worker is defined yet
+      if (force) {
+        Repl.#WORKER = new Worker(this.workerScript);
+      } else {
+        Repl.#WORKER = Repl.#WORKER || new Worker(this.workerScript);
+      }
+
+      this.#worker = Repl.#WORKER;
+    }
+  }
+
+  // eslint-disable-next-line no-undef
+  #newRuntime() {
+    this.#runtime = new Runtime(this.#worker, this.id);
+
+    const promise = new Promise((resolve, reject) => {
+      // initialize Pyodide and preload packages
+      this.#runtime
+        .init(this.packages)
+        .then(res => {
+          if (res === this.#runtime) {
+            resolve(this);
+          }
+        })
+        .catch(res => {
+          reject(res);
+        });
     });
 
     return promise;

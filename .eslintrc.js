@@ -4,6 +4,7 @@ module.exports = {
     browser: true,
     es6: true
   },
+  plugins: ['babel'],
   extends: ['airbnb-base', 'plugin:prettier/recommended'],
   globals: {
     Atomics: 'readonly',

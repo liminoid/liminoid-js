@@ -27,7 +27,7 @@ export default function() {
     expect(repl.scope).to.equal('global');
 
     // if an unknown scope is passed it defaults to global
-    const repl2 = new Repl({ scope: 'unknown' });
+    const repl2 = new Repl('unknown scope');
     expect(repl2.scope).to.equal('global');
   });
 
@@ -40,9 +40,7 @@ export default function() {
 
   it('creates a new web worker for "local" context', async function() {
     const repl = await new Repl().init();
-    const repl2 = await new Repl({
-      scope: 'local'
-    }).init();
+    const repl2 = await new Repl('local').init();
 
     expect(repl.scope).to.equal('global');
     expect(repl2.scope).to.equal('local');
@@ -51,16 +49,14 @@ export default function() {
 
   it('initializes a Runtime() and preloads packages', async function() {
     try {
-      const repl = await new Repl({
-        packages: ['numpy']
-      }).init();
+      const repl = await new Repl().init(['numpy']);
     } catch {
       expect.fail();
     }
   });
 
   it('returns a promise with results of run code', async function() {
-    const repl = await new Repl({}).init();
+    const repl = await new Repl().init();
 
     const promise = repl.run('1 + 2');
     expect(promise).to.be.an.instanceof(Promise);
@@ -70,8 +66,8 @@ export default function() {
   });
 
   it('keeps a history of the code run', async function() {
-    const repl1 = await new Repl({}).init();
-    const repl2 = await new Repl({}).init();
+    const repl1 = await new Repl().init();
+    const repl2 = await new Repl().init();
 
     await repl1.run('1 + 2');
     expect(repl1.history).to.equal('1 + 2');
@@ -85,8 +81,8 @@ export default function() {
   });
 
   it('counts the number of code executions', async function() {
-    const repl1 = await new Repl({}).init();
-    const repl2 = await new Repl({}).init();
+    const repl1 = await new Repl().init();
+    const repl2 = await new Repl().init();
 
     expect(repl1.runCount).to.equal(0);
     expect(repl2.runCount).to.equal(0);
@@ -101,7 +97,7 @@ export default function() {
   });
 
   it('can restart the Python session', async function() {
-    const repl = await new Repl({}).init();
+    const repl = await new Repl().init();
 
     await repl.run('birds = "awesome"');
     const result = await repl.run('birds');
