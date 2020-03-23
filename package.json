@@ -62,5 +62,8 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-terser": "^5.3.0"
   },
-  "peerDependencies": {}
+  "peerDependencies": {},
+  "dependencies": {
+    "rollup": "^2.1.0"
+  }
 }
