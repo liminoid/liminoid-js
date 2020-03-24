@@ -1,6 +1,6 @@
 {
   "name": "liminoid-js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Asynchonous Javascript REPL for web assembly language runtimes",
   "keywords": [
     "javascript",
@@ -30,9 +30,9 @@
     "src/**/*.js"
   ],
   "scripts": {
+    "build": "rollup -c",
     "pretest": "yarn build",
     "test": "npx serve tests",
-    "build": "rollup -c",
     "lint": "eslint --fix src",
     "examples": "npx serve examples",
     "prepublishOnly": "rm -rf dist && yarn lint && yarn build"
