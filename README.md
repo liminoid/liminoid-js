@@ -55,7 +55,7 @@ repl
   .then(res => console.log(res.value));
 
 // if you want to run a chunk of code in a single call
-// you can use Javascript templaate literals
+// you can use Javascript template literals
 const code = `
 import numpy as np
 array = np.array([1,2,3])
