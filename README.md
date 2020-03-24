@@ -28,7 +28,15 @@
 
 ## Installation
 
-`$ yarn add liminoid-js` or `$ npm install --save liminoid-js`
+```sh
+$ yarn add liminoid-js
+```
+
+or
+
+```sh
+$ npm install --save liminoid-js
+```
 
 ## Usage
 
@@ -46,9 +54,11 @@ repl
   .run('array.max()')
   .then(res => console.log(res.value));
 
+// if you want to run a chunk of code in a single call
+// you can use Javascript templaate literals
 const code = `
 import numpy as np
-array = np,array([1,2,3])
+array = np.array([1,2,3])
 array.max()
 `.trim();
 
