@@ -1,13 +1,14 @@
 {
   "name": "liminoid-js",
   "version": "0.1.4",
-  "description": "Javascript API for https://liminoid.io",
+  "description": "Asynchonous Javascript REPL for web assembly language runtimes",
   "keywords": [
     "javascript",
     "web assembly",
     "python",
     "pyodide",
-    "repl"
+    "repl",
+    "liminoid"
   ],
   "author": {
     "name": "Jonathan Dinu",

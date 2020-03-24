@@ -2,7 +2,7 @@
 
   <h1>🔵🔴 liminoid-js 🔴🔵</h1>
 
-<strong>Javascript API for [Liminoid](https://liminoid.io/)</strong>
+<strong>Asynchonous Javascript REPL for web assembly language runtimes</strong>
 
 </div>
 
@@ -26,6 +26,35 @@
   </h3>
 </div>
 
+## Installation
+
+`$ yarn add liminoid-js` or `$ npm install --save liminoid-js`
+
+## Usage
+
+For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/).
+
+```js
+const repl = new Repl();
+
+// each call to run() returns a promise that
+// resolves to a Result of the expression
+repl
+  .init(['numpy'])
+  .run('import numpy as np')
+  .run('array = np.array([1,2,3])')
+  .run('array.max()')
+  .then(res => console.log(res.value));
+
+const code = `
+import numpy as np
+array = np,array([1,2,3])
+array.max()
+`.trim();
+
+repl.init(['numpy']).run(code);
+```
+
 ## Contributing/Requests
 
 Open an issue or post a message in the [chatroom](https://matrix.to/#/!CPoHZRWLrkbgPuzGpU:matrix.org/$cw1qJZO_Ykr4rPF5_Of3OXGg_4j8E4LkqdkFqGFGA_U?via=matrix.org).
@@ -37,7 +66,7 @@ While not required, when using (or extending) Liminoid for academic work, citati
 ```
 @software{liminoid,
   author = {Jonathan Dinu},
-  title = {Liminoid: Local-first interactive Python documents},
+  title = {Liminoid: Web assembly toolkit for building local-first analytics applications},
   url = {https://github.com/liminoid},
   version = {0.0.1},
   month = {March},

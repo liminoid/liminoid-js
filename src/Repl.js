@@ -1,4 +1,5 @@
 import Runtime from './Runtime'; // eslint-disable-line no-unused-vars
+import Result from './Result';
 import workerTemplate from './worker';
 
 export default class Repl {
@@ -43,16 +44,7 @@ export default class Repl {
   }
 
   run(code) {
-    const promise = new Promise((resolve, reject) => {
-      this.#history.push(code);
-
-      this.#runtime
-        .exec(code)
-        .then(res => resolve(res))
-        .catch(err => reject(err));
-    });
-
-    return promise;
+    return new Result().run(this.#runtime, this.#history, code);
   }
 
   restart() {
