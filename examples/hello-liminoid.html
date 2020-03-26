@@ -5,10 +5,9 @@
     <title>Hello Liminoid</title>
   </head>
   <body>
-    <div id="vis"></div>
-
+    <div id="result"></div>
     <script type="module">
-      import { Repl } from '../dist/liminoid-lib.esm.min.js';
+      import { Repl } from 'https://unpkg.com/liminoid-js';
 
       const repl = new Repl();
 
@@ -18,7 +17,7 @@
         .then(repl => repl.run('a = [[1, 0], [0, 1]]'))
         .then(repl => repl.run('b = [[4, 1], [2, 2]]'))
         .then(repl => repl.run('np.dot(a, b)'))
-        .then(repl => console.log(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
+        .then(repl => document.getElementById('result').innerText(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
     </script>
   </body>
 </html>
