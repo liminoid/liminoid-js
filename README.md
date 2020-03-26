@@ -43,26 +43,40 @@ $ npm install --save liminoid-js
 For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/).
 
 ```js
+import { Repl } from 'https://unpkg.com/liminoid-js';
+
 const repl = new Repl();
 
 // each call to run() returns a promise that
-// resolves to a Result of the expression
+// resolves to a Result() of the last expression
 repl
   .init(['numpy'])
-  .run('import numpy as np')
-  .run('array = np.array([1,2,3])')
-  .run('array.max()')
-  .then(res => console.log(res.value));
+  .then(repl => repl.run('import numpy as np'))
+  .then(repl => repl.run('a = [[1, 0], [0, 1]]'))
+  .then(repl => repl.run('b = [[4, 1], [2, 2]]'))
+  .then(repl => repl.run('np.dot(a, b)'))
+  .then(repl => console.log(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
+```
 
-// if you want to run a chunk of code in a single call
-// you can use Javascript template literals
+If you want to run a chunk of code in a single call you can use Javascript template literals.
+
+```js
 const code = `
-import numpy as np
-array = np.array([1,2,3])
-array.max()
+a = [[1, 0], [0, 1]]
+b = [[4, 1], [2, 2]]
+np.dot(a, b)
 `.trim();
 
-repl.init(['numpy']).run(code);
+// you can use await syntax as long as you are in an async function
+const dotProduct = (async () => {
+  const repl = await new Repl().init(['numpy']);
+  await repl.run('import numpy as np');
+
+  // NOTE: importing a library twice (numpy here) can cause an error
+  // so we leave the import out of the code chunk.
+  const result = await repl.run(code);
+  console.log(result.value); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
+})();
 ```
 
 ## Contributing/Requests

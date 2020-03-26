@@ -1,5 +1,4 @@
 import Runtime from './Runtime'; // eslint-disable-line no-unused-vars
-import Result from './Result';
 import workerTemplate from './worker';
 
 export default class Repl {
@@ -8,6 +7,7 @@ export default class Repl {
   #worker;
   #runtime;
   #history = [];
+  #value;
   id;
   scope;
 
@@ -36,6 +36,10 @@ export default class Repl {
     return this.#worker;
   }
 
+  get value() {
+    return this.#value;
+  }
+
   init(packages = []) {
     // initialize web worker for proper Python runtime scope/context
     this.packages = packages;
@@ -44,7 +48,19 @@ export default class Repl {
   }
 
   run(code) {
-    return new Result().run(this.#runtime, this.#history, code);
+    const promise = new Promise((resolve, reject) => {
+      this.#history.push(code);
+
+      this.#runtime
+        .exec(code)
+        .then(res => {
+          this.#value = res;
+          resolve(this);
+        })
+        .catch(err => reject(err));
+    });
+
+    return promise;
   }
 
   restart() {

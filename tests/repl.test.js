@@ -5,7 +5,6 @@
 import { expect } from 'chai';
 
 import Repl from '../src/Repl.js';
-import Result from '../src/Result.js';
 
 export default function() {
   it('increments the total number of instances on initialization', function() {
@@ -56,14 +55,14 @@ export default function() {
     }
   });
 
-  it('returns a promise with results of run code', async function() {
+  it('returns a promise that resolves to the Repl with a value attached', async function() {
     const repl = await new Repl().init();
 
     const promise = repl.run('1 + 2');
     expect(promise).to.be.an.instanceof(Promise);
 
     const result = await promise;
-    expect(result).to.be.an.instanceof(Result);
+    expect(result).to.equal(repl);
     expect(result.value).to.equal(3);
   });
 
@@ -103,14 +102,15 @@ export default function() {
 
     await repl.run('birds = "awesome"');
     const result = await repl.run('birds');
-    expect(result.value).to.equal('awesome');
+    const oldValue = result.value;
+    expect(oldValue).to.equal('awesome');
     const oldWorker = repl.worker;
 
     await repl.restart();
 
     const newResult = await repl.run('"birds" in globals()');
 
-    expect(result.value).to.equal('awesome');
+    expect(oldValue).to.equal('awesome');
     expect(newResult.value).to.equal(false);
     expect(repl.worker).to.not.equal(oldWorker);
   });
