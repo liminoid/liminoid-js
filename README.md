@@ -47,8 +47,9 @@ import { Repl } from 'https://unpkg.com/liminoid-js';
 
 const repl = new Repl();
 
-// each call to run() returns a promise that
-// resolves to a Result() of the last expression
+// each call to run() returns a promise that resolves
+// to the Repl() object. The value of the executed
+// expression is stored as `.value` on the Repl()
 repl
   .init(['numpy'])
   .then(repl => repl.run('import numpy as np'))
@@ -61,6 +62,8 @@ repl
 If you want to run a chunk of code in a single call you can use Javascript template literals.
 
 ```js
+// NOTE: importing a library twice (numpy here) can cause an error
+// so we leave the import out of the code chunk.
 const code = `
 a = [[1, 0], [0, 1]]
 b = [[4, 1], [2, 2]]
@@ -72,8 +75,6 @@ const dotProduct = (async () => {
   const repl = await new Repl().init(['numpy']);
   await repl.run('import numpy as np');
 
-  // NOTE: importing a library twice (numpy here) can cause an error
-  // so we leave the import out of the code chunk.
   const result = await repl.run(code);
   console.log(result.value); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
 })();
