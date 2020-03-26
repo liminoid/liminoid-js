@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello Liminoid</title>
+  </head>
+  <body>
+    <div id="vis"></div>
+
+    <script type="module">
+      import { Repl } from '../dist/liminoid-lib.esm.min.js';
+
+      const repl = new Repl();
+
+      repl
+        .init(['numpy'])
+        .then(repl => repl.run('import numpy as np'))
+        .then(repl => repl.run('a = [[1, 0], [0, 1]]'))
+        .then(repl => repl.run('b = [[4, 1], [2, 2]]'))
+        .then(repl => repl.run('np.dot(a, b)'))
+        .then(repl => console.log(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
+    </script>
+  </body>
+</html>

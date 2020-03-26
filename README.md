@@ -43,8 +43,10 @@ $ npm install --save liminoid-js
 For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/).
 
 ```js
+// easiest to use ES6 imports from UNPKG CDN
 import { Repl } from 'https://unpkg.com/liminoid-js';
 
+// Repl() constuctor is synchronous
 const repl = new Repl();
 
 // each call to run() returns a promise that resolves
@@ -79,6 +81,8 @@ const dotProduct = (async () => {
   console.log(result.value); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
 })();
 ```
+
+See how to run this example in a web page: [examples/hello-liminoid.html](examples/hello-liminoid.html)
 
 ## Contributing/Requests
 
