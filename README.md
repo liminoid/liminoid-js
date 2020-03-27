@@ -2,7 +2,7 @@
 
   <h1>🔵🔴 liminoid-js 🔴🔵</h1>
 
-<strong>Asynchonous Javascript REPL for web assembly language runtimes</strong>
+<strong>Lightweight asynchonous Javascript REPL for web assembly language runtimes</strong>
 
 </div>
 
