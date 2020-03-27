@@ -1,6 +1,6 @@
 {
   "name": "liminoid-js",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Asynchonous Javascript REPL for web assembly language runtimes",
   "keywords": [
     "javascript",
@@ -17,7 +17,7 @@
   "license": "MIT",
   "homepage": "https://github.com/liminoid/liminoid-js",
   "bugs": "https://github.com/liminoid/liminoid-js/issues",
-  "main": "dist/liminoid-lib.umd.js",
+  "main": "dist/liminoid-lib.umd.min.js",
   "module": "src/index.js",
   "unpkg": "dist/liminoid-lib.esm.min.js",
   "jsdelivr": "dist/liminoid-lib.umd.min.js",

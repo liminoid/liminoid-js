@@ -1,3 +1,6 @@
+// mainly a Pyodide wrapper class now
+// but will serve as an abstraction around
+// any Wasm language module
 export default class Runtime {
   #worker;
   id;

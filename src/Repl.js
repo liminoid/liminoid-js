@@ -2,33 +2,42 @@ import Runtime from './Runtime'; // eslint-disable-line no-unused-vars
 import workerTemplate from './worker';
 
 export default class Repl {
-  static #WORKER;
+  // class fields
   static count = 0;
+  static #workerScript = URL.createObjectURL(
+    new Blob([workerTemplate], {
+      type: 'text/javascript'
+    })
+  );
+
+  // private instance fields
   #worker;
   #runtime;
   #history = [];
   #value;
-  id;
-  scope;
+  #id;
+  #packages;
 
-  constructor(scope = 'global') {
-    this.scope = scope === 'local' ? scope : 'global';
-    this.workerScript = URL.createObjectURL(
-      new Blob([workerTemplate], {
-        type: 'text/javascript'
-      })
-    );
-
+  constructor() {
     // update class state shared between editors
     Repl.count += 1;
-    this.id = Repl.count;
+    this.#id = Repl.count;
+  }
+
+  // public instance API
+  get id() {
+    return this.#id;
+  }
+
+  get packages() {
+    return this.#packages;
   }
 
   get history() {
-    return this.#history.join('\n');
+    return this.#history.map(x => x.cmd).join('\n');
   }
 
-  get runCount() {
+  get callCount() {
     return this.#history.length;
   }
 
@@ -40,78 +49,40 @@ export default class Repl {
     return this.#value;
   }
 
-  init(packages = []) {
+  async init(packages = [], worker = new Worker(Repl.#workerScript)) {
     // initialize web worker for proper Python runtime scope/context
-    this.packages = packages;
-    this.#assignWorker();
-    return this.#newRuntime();
+    this.#worker = worker;
+    this.#packages = packages;
+    this.#runtime = await new Runtime(this.#worker, this.#id).init(
+      this.#packages
+    );
+
+    // return `Repl()` to allow `run()` chaining
+    return this;
   }
 
-  run(code) {
-    const promise = new Promise((resolve, reject) => {
-      this.#history.push(code);
+  async restart(
+    packages = this.#packages,
+    worker = new Worker(Repl.#workerScript)
+  ) {
+    const startTs = Date.now();
 
-      this.#runtime
-        .exec(code)
-        .then(res => {
-          this.#value = res;
-          resolve(this);
-        })
-        .catch(err => reject(err));
-    });
-
-    return promise;
-  }
-
-  restart() {
-    console.log('Restarting Python session...');
-    this.#history.push('RESTART SESSION\n');
     this.#worker.terminate();
+    await this.init(packages, worker);
 
-    const promise = new Promise((resolve, reject) => {
-      this.#assignWorker(true);
-      this.#newRuntime()
-        .then(res => resolve(res))
-        .catch(err => reject(err));
-    });
+    const log = { start: startTs, end: Date.now(), cmd: '$RESTART SESSION$' };
+    this.#history.push(log);
 
-    return promise;
+    return this;
   }
 
-  // eslint-disable-next-line no-undef
-  #assignWorker(force = false) {
-    if (this.scope === 'local') {
-      this.#worker = new Worker(this.workerScript);
-    } else {
-      // check is class wide shared worker is defined yet
-      if (force) {
-        Repl.#WORKER = new Worker(this.workerScript);
-      } else {
-        Repl.#WORKER = Repl.#WORKER || new Worker(this.workerScript);
-      }
+  async run(code) {
+    const startTs = Date.now();
+    this.#value = await this.#runtime.exec(code);
 
-      this.#worker = Repl.#WORKER;
-    }
-  }
+    const log = { start: startTs, end: Date.now(), cmd: code };
+    this.#history.push(log);
 
-  // eslint-disable-next-line no-undef
-  #newRuntime() {
-    this.#runtime = new Runtime(this.#worker, this.id);
-
-    const promise = new Promise((resolve, reject) => {
-      // initialize Pyodide and preload packages
-      this.#runtime
-        .init(this.packages)
-        .then(res => {
-          if (res === this.#runtime) {
-            resolve(this);
-          }
-        })
-        .catch(res => {
-          reject(res);
-        });
-    });
-
-    return promise;
+    return this;
   }
 }

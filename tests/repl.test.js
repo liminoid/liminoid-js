@@ -1,11 +1,8 @@
-////////////////////////////////////////////////////////////////////
-// Test case needs to run in the browser to properly use web workers
-////////////////////////////////////////////////////////////////////
-
 import { expect } from 'chai';
 
-import Repl from '../src/Repl.js';
+import Repl from '../src/Repl';
 
+// Test case needs to run in the browser to properly use web workers
 export default function() {
   it('increments the total number of instances on initialization', function() {
     expect(Repl.count).to.equal(0);
@@ -22,34 +19,9 @@ export default function() {
     expect(repl.id).to.equal(3);
   });
 
-  it('defaults to "global" context', function() {
-    const repl = new Repl();
-    expect(repl.scope).to.equal('global');
-
-    // if an unknown scope is passed it defaults to global
-    const repl2 = new Repl('unknown scope');
-    expect(repl2.scope).to.equal('global');
-  });
-
-  it('shares a web worker for a "global" context', async function() {
-    const repl = await new Repl().init();
-    const repl2 = await new Repl().init();
-
-    expect(repl.worker).to.equal(repl2.worker);
-  });
-
-  it('creates a new web worker for "local" context', async function() {
-    const repl = await new Repl().init();
-    const repl2 = await new Repl('local').init();
-
-    expect(repl.scope).to.equal('global');
-    expect(repl2.scope).to.equal('local');
-    expect(repl.worker).to.not.equal(repl2.worker);
-  });
-
   it('initializes a Runtime() and preloads packages', async function() {
     try {
-      const repl = await new Repl().init(['numpy']);
+      await new Repl().init(['numpy']);
     } catch {
       expect.fail();
     }
@@ -81,22 +53,6 @@ export default function() {
     expect(repl2.history).to.equal('print("hello")');
   });
 
-  it('counts the number of code executions', async function() {
-    const repl1 = await new Repl().init();
-    const repl2 = await new Repl().init();
-
-    expect(repl1.runCount).to.equal(0);
-    expect(repl2.runCount).to.equal(0);
-
-    await repl1.run('1 + 2');
-    expect(repl1.runCount).to.equal(1);
-    await repl2.run('1 + 2');
-    expect(repl2.runCount).to.equal(1);
-
-    await repl1.run('print("chai")');
-    expect(repl1.runCount).to.equal(2);
-  });
-
   it('can restart the Python session', async function() {
     const repl = await new Repl().init();
 
@@ -113,5 +69,21 @@ export default function() {
     expect(oldValue).to.equal('awesome');
     expect(newResult.value).to.equal(false);
     expect(repl.worker).to.not.equal(oldWorker);
+  });
+
+  it('counts the number of code executions', async function() {
+    const repl1 = await new Repl().init();
+    const repl2 = await new Repl().init();
+
+    expect(repl1.callCount).to.equal(0);
+    expect(repl2.callCount).to.equal(0);
+
+    await repl1.run('1 + 2');
+    expect(repl1.callCount).to.equal(1);
+    await repl2.run('1 + 2');
+    expect(repl2.callCount).to.equal(1);
+
+    await repl1.restart();
+    expect(repl1.callCount).to.equal(2);
   });
 }
