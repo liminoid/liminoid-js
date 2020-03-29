@@ -11,23 +11,33 @@ function parseLog(log) {
 
 self.onmessage = function(e) {
   const { action } = e.data;
-  if (action === 'init' && e.data.packages) {
-    languagePluginLoader.then(() => {
-      self.pyodide
-        .loadPackage(e.data.packages)
-        .then(() => {
-          self.postMessage({
-            action: 'loaded',
-            packages: Object.keys(self.pyodide.loadedPackages)
-          });
-        })
-        .catch(err => {
-          self.postMessage({
-            action: 'error',
-            results: err.message
-          });
+  if (action === 'init') {
+    languagePluginLoader
+      .then(() => {
+        self.postMessage({
+          action: 'initialized'
         });
-    });
+      })
+      .catch(err => {
+        self.postMessage({
+          action: 'error',
+          results: err.message
+        });
+      });
+  } else if (action === 'load' && e.data.packages) {
+    self.pyodide
+      .loadPackage(e.data.packages)
+      .then(() => {
+        self.postMessage({
+          action: 'loaded'
+        });
+      })
+      .catch(err => {
+        self.postMessage({
+          action: 'error',
+          results: err.message
+        });
+      });
   } else if (action === 'exec' && e.data.code) {
     try {
       self.pyodide

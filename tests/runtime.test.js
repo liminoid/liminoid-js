@@ -1,12 +1,9 @@
-////////////////////////////////////////////////////////////////////
-// Test case needs to run in the browser to properly use web workers
-////////////////////////////////////////////////////////////////////
-
 import { expect } from 'chai';
 
-import Runtime from '../src/Runtime.js';
+import Runtime from '../src/Runtime';
 import workerTemplate from '../src/worker';
 
+// Test case needs to run in the browser to properly use web workers
 export default function() {
   let runtime;
 
@@ -17,11 +14,24 @@ export default function() {
       })
     );
     runtime = new Runtime(new Worker(workerUrl), 1);
-    await runtime.init(['numpy']);
+    await runtime.init();
   });
 
-  it('should initialize Pyodide and preload packages', function() {
-    expect(runtime.packages).to.include('numpy');
+  it('should preload packages', async function() {
+    try {
+      await runtime.load(['numpy']);
+    } catch {
+      expect.fail();
+    }
+  });
+
+  it('should support multiple load calls', async function() {
+    try {
+      await runtime.load(['numpy']);
+      await runtime.load(['networkx']);
+    } catch {
+      expect.fail();
+    }
   });
 
   it('should return correct results when running Python code', async function() {

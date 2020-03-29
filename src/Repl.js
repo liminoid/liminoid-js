@@ -16,7 +16,7 @@ export default class Repl {
   #history = [];
   #value;
   #id;
-  #packages;
+  #packages = new Set();
 
   constructor() {
     // update class state shared between editors
@@ -49,26 +49,37 @@ export default class Repl {
     return this.#value;
   }
 
-  async init(packages = [], worker = new Worker(Repl.#workerScript)) {
+  async init(worker = new Worker(Repl.#workerScript)) {
     // initialize web worker for proper Python runtime scope/context
     this.#worker = worker;
-    this.#packages = packages;
-    this.#runtime = await new Runtime(this.#worker, this.#id).init(
-      this.#packages
-    );
+    this.#runtime = await new Runtime(this.#worker, this.#id).init();
 
     // return `Repl()` to allow `run()` chaining
     return this;
   }
 
+  async load(packages = []) {
+    const diff = packages.filter(x => !this.#packages.has(x));
+    await this.#runtime.load(diff);
+
+    diff.forEach(d => {
+      this.#packages.add(d);
+    });
+
+    return this;
+  }
+
   async restart(
-    packages = this.#packages,
+    packages = Array.from(this.#packages),
     worker = new Worker(Repl.#workerScript)
   ) {
     const startTs = Date.now();
 
     this.#worker.terminate();
-    await this.init(packages, worker);
+    this.#packages.clear();
+
+    await this.init(worker);
+    await this.load(packages);
 
     const log = { start: startTs, end: Date.now(), cmd: '$RESTART SESSION$' };
     this.#history.push(log);

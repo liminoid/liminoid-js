@@ -4,7 +4,6 @@
 export default class Runtime {
   #worker;
   id;
-  packages;
 
   constructor(worker, id) {
     this.#worker = worker;
@@ -18,21 +17,35 @@ export default class Runtime {
     };
   }
 
-  init(preload = []) {
-    // initialize Pyodide and preload packages
+  init() {
+    // initialize Pyodide
     const promise = new Promise((resolve, reject) => {
       this.#worker.onmessage = e => {
-        const { action, packages } = e.data;
-        if (action === 'loaded') {
-          console.log(`Runtime initialized with :${packages}`);
-          this.packages = packages;
+        const { action } = e.data;
+        if (action === 'initialized') {
           resolve(this);
         } else {
           reject(new Error('Runtime initialization failed'));
         }
       };
     });
-    this.#worker.postMessage({ action: 'init', packages: preload });
+    this.#worker.postMessage({ action: 'init' });
+    return promise;
+  }
+
+  load(preload = []) {
+    // preload packages
+    const promise = new Promise((resolve, reject) => {
+      this.#worker.onmessage = e => {
+        const { action } = e.data;
+        if (action === 'loaded') {
+          resolve(this);
+        } else {
+          reject(new Error('Package preloading failed'));
+        }
+      };
+    });
+    this.#worker.postMessage({ action: 'load', packages: preload });
     return promise;
   }
 

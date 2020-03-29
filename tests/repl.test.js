@@ -19,12 +19,29 @@ export default function() {
     expect(repl.id).to.equal(3);
   });
 
-  it('initializes a Runtime() and preloads packages', async function() {
+  it('initializes a Runtime()', async function() {
     try {
-      await new Repl().init(['numpy']);
+      const repl = await new Repl().init();
+      expect(repl).to.be.an.instanceof(Repl);
     } catch {
       expect.fail();
     }
+  });
+
+  it('should deduplicate packages on subsequent load() calls', async function() {
+    let repl = await new Repl().init();
+    expect(repl.packages).to.be.an('set').that.is.empty;
+
+    repl = await repl.load(['numpy']);
+    expect(repl).to.be.an.instanceof(Repl);
+    expect(repl.packages).to.have.lengthOf(1);
+    expect(repl.packages).to.include('numpy');
+
+    repl = await repl.load(['numpy', 'networkx']);
+    expect(repl).to.be.an.instanceof(Repl);
+    expect(repl.packages).to.have.lengthOf(2);
+    expect(repl.packages).to.include('numpy');
+    expect(repl.packages).to.include('networkx');
   });
 
   it('returns a promise that resolves to the Repl with a value attached', async function() {
