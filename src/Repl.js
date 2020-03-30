@@ -60,11 +60,14 @@ export default class Repl {
 
   async load(packages = []) {
     const diff = packages.filter(x => !this.#packages.has(x));
-    await this.#runtime.load(diff);
 
-    diff.forEach(d => {
-      this.#packages.add(d);
-    });
+    if (diff.length > 0) {
+      await this.#runtime.load(diff);
+
+      diff.forEach(d => {
+        this.#packages.add(d);
+      });
+    }
 
     return this;
   }
