@@ -19,7 +19,7 @@ export default class Repl {
   #packages = new Set();
 
   constructor() {
-    // update class state shared between editors
+    // update class state shared between Repls
     Repl.count += 1;
     this.#id = Repl.count;
   }

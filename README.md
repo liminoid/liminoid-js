@@ -12,7 +12,7 @@
       Documentation
     </a>
     <span> | </span>
-    <a href="https://matrix.to/#/!CPoHZRWLrkbgPuzGpU:matrix.org/$cw1qJZO_Ykr4rPF5_Of3OXGg_4j8E4LkqdkFqGFGA_U?via=matrix.org">
+    <a href="https://discord.gg/e2vxBhu">
       Chatroom
     </a>
     <span> | </span>
@@ -40,7 +40,7 @@ $ npm install --save liminoid-js
 
 ## Usage
 
-For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/).
+For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/) or browse the [examples](examples).
 
 ```js
 // easiest to use ES6 imports from UNPKG CDN
@@ -86,7 +86,7 @@ See how to run this example in a web page: [examples/hello-liminoid.html](exampl
 
 ## Contributing/Requests
 
-Open an issue or post a message in the [chatroom](https://matrix.to/#/!CPoHZRWLrkbgPuzGpU:matrix.org/$cw1qJZO_Ykr4rPF5_Of3OXGg_4j8E4LkqdkFqGFGA_U?via=matrix.org).
+Open an [issue](https://github.com/liminoid/liminoid-js/issues) or post a message in the [chatroom](https://discord.gg/e2vxBhu).
 
 ## Citing
 
