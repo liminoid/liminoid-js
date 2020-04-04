@@ -57,7 +57,8 @@ const repl = new Repl();
 // to the Repl() object. The value of the executed
 // expression is stored as `.value` on the Repl()
 repl
-  .init(['numpy'])
+  .init()
+  .then(repl => repl.load(['numpy']))
   .then(repl => repl.run('import numpy as np'))
   .then(repl => repl.run('a = [[1, 0], [0, 1]]'))
   .then(repl => repl.run('b = [[4, 1], [2, 2]]'))
@@ -78,7 +79,8 @@ np.dot(a, b)
 
 // you can use await syntax as long as you are in an async function
 const dotProduct = (async () => {
-  const repl = await new Repl().init(['numpy']);
+  const repl = await new Repl().init();
+  await repl.load(['numpy']);
   await repl.run('import numpy as np');
 
   const result = await repl.run(code);

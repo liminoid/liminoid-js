@@ -43,7 +43,8 @@
       const c = document.getElementById('console');
 
       repl
-        .init(['numpy'])
+        .init()
+        .then(repl => repl.load(['numpy']))
         .then(repl => repl.run('import numpy as np'))
         .then(repl => {
           c.innerText = 'Computing result...';
