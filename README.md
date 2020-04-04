@@ -7,7 +7,7 @@
 </div>
 
 <div align="center">
-  <h3>
+  <h4>
     <a href="https://liminoid.io/guides/javascript/">
       Documentation
     </a>
@@ -23,7 +23,11 @@
     <a href="https://stackoverflow.com/questions/tagged/liminoid">
       Stack Overflow
     </a>
-  </h3>
+    <span> | </span>
+    <a href="https://liminoid.io/contributing/">
+      Contributing
+    </a>
+  </h4>
 </div>
 
 ## Installation
@@ -86,7 +90,7 @@ See how to run this example in a web page: [examples/hello-liminoid.html](exampl
 
 ## Contributing/Requests
 
-Open an [issue](https://github.com/liminoid/liminoid-js/issues) or post a message in the [chatroom](https://discord.gg/e2vxBhu).
+Open an [issue](https://github.com/liminoid/liminoid-js/issues) or post a message in the [chatroom](https://discord.gg/e2vxBhu). If you would like to contribute to the project (code, documentation, tutorials, etc.) see the [contributing guide](https://liminoid.io/contributing/) for how to get started 🙌
 
 ## Citing
 
