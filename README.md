@@ -8,7 +8,7 @@
 
 <div align="center">
   <h4>
-    <a href="https://liminoid.io/guides/javascript/">
+    <a href="https://liminoid.io/reference/javascript/">
       Documentation
     </a>
     <span> | </span>
@@ -44,7 +44,7 @@ $ npm install --save liminoid-js
 
 ## Usage
 
-For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/guides/javascript/) or browse the [examples](examples).
+For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/reference/javascript/) or browse the [examples](examples).
 
 ```js
 // easiest to use ES6 imports from the UNPKG CDN
