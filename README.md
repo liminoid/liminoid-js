@@ -58,12 +58,12 @@ const repl = new Repl();
 // expression is stored as `.value` on the Repl()
 repl
   .init()
-  .then(repl => repl.load(['numpy']))
-  .then(repl => repl.run('import numpy as np'))
-  .then(repl => repl.run('a = [[1, 0], [0, 1]]'))
-  .then(repl => repl.run('b = [[4, 1], [2, 2]]'))
-  .then(repl => repl.run('np.dot(a, b)'))
-  .then(repl => console.log(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
+  .then((repl) => repl.load(['numpy']))
+  .then((repl) => repl.run('import numpy as np'))
+  .then((repl) => repl.run('a = [[1, 0], [0, 1]]'))
+  .then((repl) => repl.run('b = [[4, 1], [2, 2]]'))
+  .then((repl) => repl.run('np.dot(a, b)'))
+  .then((repl) => console.log(repl.value)); //=> Array[ Int32Array [ 4, 1 ], Int32Array [ 2, 2 ] ]
 ```
 
 If you want to run a chunk of code in a single call you can use Javascript template literals.
@@ -101,11 +101,12 @@ While not required, when using (or extending) Liminoid for academic work, citati
 ```
 @software{liminoid,
   author = {Jonathan Dinu},
-  title = {Liminoid: Web assembly toolkit for building local-first analytics applications},
-  url = {https://github.com/liminoid},
-  version = {0.0.1},
+  title = {Liminoid: Web assembly toolkit for building local-first interactive analytics applications},
   month = {March},
-  year = {2020}
+  year = {2020},
+  version = {0.0.1},
+  doi = {10.5281/zenodo.3754953},
+  url = {https://github.com/liminoid},
 }
 ```
 
