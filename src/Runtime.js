@@ -10,7 +10,7 @@ export default class Runtime {
     this.id = id;
 
     // attach web worker callbacks
-    this.#worker.onerror = e => {
+    this.#worker.onerror = (e) => {
       console.log(
         `Error in Pyodide worker ${this.id} at ${e.filename}, Line: ${e.lineno}, ${e.message}`
       );
@@ -20,7 +20,7 @@ export default class Runtime {
   init() {
     // initialize Pyodide
     const promise = new Promise((resolve, reject) => {
-      this.#worker.onmessage = e => {
+      this.#worker.onmessage = (e) => {
         const { action } = e.data;
         if (action === 'initialized') {
           resolve(this);
@@ -36,7 +36,7 @@ export default class Runtime {
   load(preload = []) {
     // preload packages
     const promise = new Promise((resolve, reject) => {
-      this.#worker.onmessage = e => {
+      this.#worker.onmessage = (e) => {
         const { action } = e.data;
         if (action === 'loaded') {
           resolve(this);
@@ -51,7 +51,7 @@ export default class Runtime {
 
   exec(code) {
     const promise = new Promise((resolve, reject) => {
-      this.#worker.onmessage = e => {
+      this.#worker.onmessage = (e) => {
         const { action, results } = e.data;
         if (action === 'return') {
           resolve(results);
@@ -65,7 +65,7 @@ export default class Runtime {
 
     this.#worker.postMessage({
       action: 'exec',
-      code
+      code,
     });
 
     return promise;
