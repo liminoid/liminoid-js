@@ -1,6 +1,6 @@
 {
   "name": "liminoid-js",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Lightweight asynchonous Javascript REPL for web assembly language runtimes",
   "keywords": [
     "javascript",
