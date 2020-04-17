@@ -10,7 +10,7 @@ const outputCommon = {
   name: 'liminoid-lib',
   banner: `// ${meta.homepage} v${
     meta.version
-  } Copyright ${new Date().getFullYear()} ${meta.author.name}`
+  } Copyright ${new Date().getFullYear()} ${meta.author.name}`,
 };
 
 const plugins = [babel()];
@@ -29,12 +29,12 @@ const umd = {
       plugins: [
         terser({
           output: {
-            preamble: outputCommon.banner
-          }
-        })
-      ]
-    }
-  ]
+            preamble: outputCommon.banner,
+          },
+        }),
+      ],
+    },
+  ],
 };
 
 const module = {
@@ -48,12 +48,12 @@ const module = {
       plugins: [
         terser({
           output: {
-            preamble: outputCommon.banner
-          }
-        })
-      ]
-    }
-  ]
+            preamble: outputCommon.banner,
+          },
+        }),
+      ],
+    },
+  ],
 };
 
 /////////////////////////////////////////////
@@ -100,18 +100,18 @@ const tests = {
   output: [
     {
       file: 'tests/bundle.js',
-      format: 'iife'
-    }
+      format: 'iife',
+    },
   ],
   plugins: [
     ...plugins,
     resolve(),
     commonjs({
       namedExports: {
-        chai: ['expect']
-      }
-    })
-  ]
+        chai: ['expect'],
+      },
+    }),
+  ],
 };
 
 export default [umd, module, tests];

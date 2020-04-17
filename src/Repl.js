@@ -6,7 +6,7 @@ export default class Repl {
   static count = 0;
   static #workerScript = URL.createObjectURL(
     new Blob([workerTemplate], {
-      type: 'text/javascript'
+      type: 'text/javascript',
     })
   );
 
@@ -18,10 +18,9 @@ export default class Repl {
   #id;
   #packages = new Set();
 
-  constructor() {
-    // update class state shared between Repls
-    Repl.count += 1;
-    this.#id = Repl.count;
+  constructor(id) {
+    this.#id =
+      id || window.crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
   }
 
   // public instance API
@@ -34,7 +33,7 @@ export default class Repl {
   }
 
   get history() {
-    return this.#history.map(x => x.cmd).join('\n');
+    return this.#history.map((x) => x.cmd).join('\n');
   }
 
   get callCount() {
@@ -59,12 +58,12 @@ export default class Repl {
   }
 
   async load(packages = []) {
-    const diff = packages.filter(x => !this.#packages.has(x));
+    const diff = packages.filter((x) => !this.#packages.has(x));
 
     if (diff.length > 0) {
       await this.#runtime.load(diff);
 
-      diff.forEach(d => {
+      diff.forEach((d) => {
         this.#packages.add(d);
       });
     }
