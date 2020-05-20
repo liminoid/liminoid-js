@@ -19,8 +19,6 @@
   "bugs": "https://github.com/liminoid/liminoid-js/issues",
   "main": "dist/liminoid-lib.umd.min.js",
   "module": "dist/liminoid-lib.esm.min.js",
-  "unpkg": "dist/liminoid-lib.esm.min.js",
-  "jsdelivr": "dist/liminoid-lib.umd.min.js",
   "repository": {
     "url": "https://github.com/liminoid/liminoid-js.git",
     "type": "git"

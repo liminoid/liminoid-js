@@ -19,7 +19,7 @@
     <pre id="console">Loading libraries...</pre>
     <script type="module">
       import katex from 'https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.mjs';
-      import { Repl } from 'https://unpkg.com/liminoid-js';
+      import { Repl } from 'https://cdn.liminoid.io/liminoid-js/index.js';
 
       // display dot product operation in HTML
       katex.render(
@@ -35,7 +35,7 @@
             \end{bmatrix} =`,
         document.getElementById('input'),
         {
-          throwOnError: false
+          throwOnError: false,
         }
       );
 
@@ -44,15 +44,15 @@
 
       repl
         .init()
-        .then(repl => repl.load(['numpy']))
-        .then(repl => repl.run('import numpy as np'))
-        .then(repl => {
+        .then((repl) => repl.load(['numpy']))
+        .then((repl) => repl.run('import numpy as np'))
+        .then((repl) => {
           c.innerText = 'Computing result...';
           return repl.run('a = [[1, 2], [3, 4]]');
         })
-        .then(repl => repl.run('b = [[5, 6], [7, 8]]'))
-        .then(repl => repl.run('np.dot(a, b)'))
-        .then(repl => {
+        .then((repl) => repl.run('b = [[5, 6], [7, 8]]'))
+        .then((repl) => repl.run('np.dot(a, b)'))
+        .then((repl) => {
           const result = repl.value;
           console.log(result);
 
@@ -65,7 +65,7 @@
                 \end{bmatrix}`,
             document.getElementById('output'),
             {
-              throwOnError: false
+              throwOnError: false,
             }
           );
           c.innerText = 'All done!';

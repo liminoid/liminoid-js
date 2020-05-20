@@ -47,8 +47,9 @@ $ npm install --save liminoid-js
 For a more comprehensive guide to using the package see the [documentation](https://liminoid.io/reference/javascript/) or browse the [examples](examples).
 
 ```js
-// easiest to use ES6 imports from the UNPKG CDN
-import { Repl } from 'https://unpkg.com/liminoid-js';
+// easiest to use ES6 imports from the CDN
+import { Repl } from 'https://cdn.liminoid.io/liminoid-js/index.js';
+// import { Repl } from https://cdn.liminoid.io/liminoid-js@x.x.x/index.js
 
 // Repl() constuctor is synchronous
 const repl = new Repl();

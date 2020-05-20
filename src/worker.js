@@ -1,6 +1,6 @@
 export default String.raw`
-self.languagePluginUrl = 'https://liminoid.io/external/pyodide/';
-importScripts('https://liminoid.io/external/pyodide/pyodide.js');
+self.languagePluginUrl = 'https://cdn.liminoid.io/pyodide/0.14.3/';
+importScripts('https://cdn.liminoid.io/pyodide/0.14.3/pyodide.js');
 
 function parseLog(log) {
   return log
